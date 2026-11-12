@@ -1,47 +1,34 @@
-name: Daily PulseScope Discovery and Publish
+name: Daily PulseScope Trusted-Source Audit
 on:
   schedule:
-    - cron: '45 2 * * *' # 08:15 Asia/Kolkata daily; GitHub schedule can be delayed
+    - cron: '45 2 * * *' # 08:15 IST; GitHub schedule may be delayed
   workflow_dispatch:
 permissions:
-  contents: write
+  contents: read
   pages: write
   id-token: write
 concurrency:
   group: github-pages
   cancel-in-progress: false
 jobs:
-  refresh-and-deploy:
+  audit-and-deploy:
     runs-on: ubuntu-latest
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
     steps:
-      - name: Check out site
+      - name: Check out dashboard and archive
         uses: actions/checkout@v4
-        with:
-          persist-credentials: true
-      - name: Discover new public headlines
-        run: python scripts/discover_news.py
-      - name: Validate archive
+      - name: Check JSON structure
         run: python -m json.tool data/briefings.json > /dev/null
-      - name: Commit cumulative archive when changed
-        run: |
-          if ! git diff --quiet -- data/briefings.json; then
-            git config user.name 'github-actions[bot]'
-            git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
-            git add data/briefings.json
-            git commit -m "Update PulseScope daily research leads"
-            git push
-          else
-            echo 'No archive changes'
-          fi
+      - name: Block unknown source domains and redirect links
+        run: python scripts/validate_sources.py
       - name: Configure GitHub Pages
         uses: actions/configure-pages@v5
-      - name: Upload website
+      - name: Upload site
         uses: actions/upload-pages-artifact@v4
         with:
           path: '.'
-      - name: Deploy website
+      - name: Deploy safe archive
         id: deployment
         uses: actions/deploy-pages@v4
