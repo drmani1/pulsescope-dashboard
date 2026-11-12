@@ -25,6 +25,8 @@ jobs:
         uses: actions/checkout@v4
       - name: Validate JSON archive
         run: python -m json.tool data/briefings.json > /dev/null
+      - name: Fail closed on unsafe, unreviewed or redirecting source URLs
+        run: python scripts/validate_sources.py
       - name: Configure GitHub Pages
         uses: actions/configure-pages@v5
       - name: Upload site
