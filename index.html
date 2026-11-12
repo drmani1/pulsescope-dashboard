@@ -56,16 +56,16 @@ const TRUSTED_SOURCES=[
 ];
 const REDIRECT_KEYS=new Set(['url','u','target','dest','destination','redirect','redirect_uri','redir','return','returnurl','next','goto','continue','adurl','link']);
 function isApprovedSource(address){
-  if(typeof address!=='string'||address.length>1800||/[\\x00-\\x20]/.test(address))return false;
+  if(typeof address!=='string'||address.length>1800||/[\x00-\x20]/.test(address))return false;
   try{
     const u=new URL(address);
-    const host=u.hostname.toLowerCase().replace(/\\.$/,'');
+    const host=u.hostname.toLowerCase().replace(/\.$/,'');
     if(u.protocol!=='https:'||u.username||u.password||u.port||!host||!TRUSTED_SOURCES.some(d=>host===d||host.endsWith('.'+d)))return false;
     for(const key of u.searchParams.keys())if(REDIRECT_KEYS.has(key.toLowerCase()))return false;
     return true;
   }catch(e){return false}
 }
-function sourceHost(url){try{return new URL(url).hostname.replace(/^www\\./,'')}catch(e){return ''}}
+function sourceHost(url){try{return new URL(url).hostname.replace(/^www\./,'')}catch(e){return ''}}
 function dateStr(d){if(!/^\d{4}-\d{2}-\d{2}$/.test(d))return d||'Unknown';const [y,m,day]=d.split('-').map(Number);return new Date(Date.UTC(y,m-1,day)).toLocaleDateString('en-GB',{year:'numeric',month:'short',day:'numeric',timeZone:'UTC'})}
 function dayDiff(a,b){return (Date.parse(a+'T00:00:00Z')-Date.parse(b+'T00:00:00Z'))/86400000}
 function count(cat){return state.items.filter(x=>x.category===cat).length}
