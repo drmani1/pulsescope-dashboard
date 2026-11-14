@@ -229,6 +229,7 @@ def main():
     new = 0
     outcomes = {}
     for key, loader in (("PubMed", pubmed_items), ("FDA 510k", fda_items)):
+        before_source = new
         try:
             found = loader()
             for item in found:
@@ -237,7 +238,7 @@ def main():
                 if item["id"] not in existing:
                     existing[item["id"]] = item
                     new += 1
-            outcomes[key] = {"status": "ok", "newRecords": new}
+            outcomes[key] = {"status": "ok", "newRecords": new - before_source}
         except Exception as exc:
             outcomes[key] = {"status": "unavailable", "reason": str(exc)[:140]}
             print(f"{key} unavailable: {type(exc).__name__}: {exc}")
