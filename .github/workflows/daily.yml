@@ -1,7 +1,7 @@
 name: Daily PulseScope Safe-Source Updates
 on:
   schedule:
-    - cron: '45 2 * * *' # Approximately 08:15 IST; GitHub schedules may run late
+    - cron: '45 2 * * *' # About 08:15 IST; GitHub scheduling can be delayed
   workflow_dispatch:
   push:
     branches: [main]
@@ -10,19 +10,24 @@ on:
       - '.github/workflows/daily.yml'
 permissions:
   contents: write
+  pages: write
+  id-token: write
 concurrency:
-  group: pulsescope-daily-update
+  group: github-pages
   cancel-in-progress: false
 jobs:
-  update-data:
+  update-and-deploy:
     runs-on: ubuntu-latest
-    timeout-minutes: 10
+    timeout-minutes: 15
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
     steps:
-      - name: Check out latest approved archive
+      - name: Check out approved archive
         uses: actions/checkout@v4
         with:
           persist-credentials: true
-      - name: Fetch direct PubMed and FDA records
+      - name: Fetch safe PubMed and FDA records
         run: python scripts/auto_update.py
       - name: Validate all published source links
         run: python scripts/validate_sources.py
@@ -30,14 +35,25 @@ jobs:
         run: |
           python -m json.tool data/briefings.json > /dev/null
           python -m json.tool data/status.json > /dev/null
-      - name: Commit daily check and any genuinely new records
+      - name: Commit daily check and genuinely new entries
         run: |
           git config user.name 'github-actions[bot]'
           git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
           git add data/briefings.json data/status.json
           if git diff --cached --quiet; then
-            echo 'No changes to publish'
+            echo 'No source or status changes to commit'
           else
-            git commit -m 'Update PulseScope official-source daily archive and check status'
+            git commit -m 'Update PulseScope daily official-source archive'
             git push origin HEAD:main
           fi
+      # Commits made with GITHUB_TOKEN do not trigger the separate deploy workflow.
+      # Deploy here too so the same public URL actually changes every day.
+      - name: Configure GitHub Pages
+        uses: actions/configure-pages@v5
+      - name: Upload updated website
+        uses: actions/upload-pages-artifact@v4
+        with:
+          path: '.'
+      - name: Publish to the permanent URL
+        id: deployment
+        uses: actions/deploy-pages@v4
