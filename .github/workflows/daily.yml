@@ -1,34 +1,43 @@
-name: Daily PulseScope Trusted-Source Audit
+name: Daily PulseScope Safe-Source Updates
 on:
   schedule:
-    - cron: '45 2 * * *' # 08:15 IST; GitHub schedule may be delayed
+    - cron: '45 2 * * *' # Approximately 08:15 IST; GitHub schedules may run late
   workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - 'scripts/auto_update.py'
+      - '.github/workflows/daily.yml'
 permissions:
-  contents: read
-  pages: write
-  id-token: write
+  contents: write
 concurrency:
-  group: github-pages
+  group: pulsescope-daily-update
   cancel-in-progress: false
 jobs:
-  audit-and-deploy:
+  update-data:
     runs-on: ubuntu-latest
-    environment:
-      name: github-pages
-      url: ${{ steps.deployment.outputs.page_url }}
+    timeout-minutes: 10
     steps:
-      - name: Check out dashboard and archive
+      - name: Check out latest approved archive
         uses: actions/checkout@v4
-      - name: Check JSON structure
-        run: python -m json.tool data/briefings.json > /dev/null
-      - name: Block unknown source domains and redirect links
-        run: python scripts/validate_sources.py
-      - name: Configure GitHub Pages
-        uses: actions/configure-pages@v5
-      - name: Upload site
-        uses: actions/upload-pages-artifact@v4
         with:
-          path: '.'
-      - name: Deploy safe archive
-        id: deployment
-        uses: actions/deploy-pages@v4
+          persist-credentials: true
+      - name: Fetch direct PubMed and FDA records
+        run: python scripts/auto_update.py
+      - name: Validate all published source links
+        run: python scripts/validate_sources.py
+      - name: Check JSON files
+        run: |
+          python -m json.tool data/briefings.json > /dev/null
+          python -m json.tool data/status.json > /dev/null
+      - name: Commit daily check and any genuinely new records
+        run: |
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add data/briefings.json data/status.json
+          if git diff --cached --quiet; then
+            echo 'No changes to publish'
+          else
+            git commit -m 'Update PulseScope official-source daily archive and check status'
+            git push origin HEAD:main
+          fi
