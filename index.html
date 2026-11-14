@@ -9,7 +9,7 @@
 <button data-view="all" class="active"><span class="glyph">▦</span> Overview</button><button data-view="tech"><span class="glyph">⌁</span> Technology</button><button data-view="regulatory"><span class="glyph">◈</span> Regulations</button><button data-view="deals"><span class="glyph">◇</span> M&A / Deals</button><button data-view="wellness"><span class="glyph">◉</span> Wellness</button><button data-view="saved"><span class="glyph">☆</span> Saved stories</button>
 </nav><div class="sidefoot"><strong>● Daily brief scheduled</strong>8:00 AM India Standard Time<br><span style="color:#93aeb5">Separate ChatGPT task · Dashboard imports its reports</span></div></aside>
 <main class="main"><div class="topbar"><div><div class="eyebrow">Health technology monitoring</div><div style="font-size:12px;color:#5a7079;margin-top:4px">Worldwide coverage · FDA · CDSCO · EU MDR</div></div><div class="topright"><span class="stamp" id="stamp"></span><button class="button" id="exportCsv">⇩ Export CSV</button><button class="button primary" id="importBtn">＋ Import daily update</button></div></div>
-<section class="hero"><div><div class="eyebrow">Your intelligence command center</div><h1 class="headline" id="heading">Medical wearables, tracked.</h1><p class="sub" id="subtitle">Validated technologies, global regulations, company deals, and wellness signals in one place.</p><span class="datebadge" id="daylabel">Research snapshot · 11 Nov 2026</span></div></section>
+<section class="hero"><div><div class="eyebrow">Your intelligence command center</div><h1 class="headline" id="heading">Medical wearables, tracked.</h1><p class="sub" id="subtitle">Validated technologies, global regulations, company deals, and wellness signals in one place.</p><span class="datebadge" id="daylabel">Research snapshot · 11 Nov 2026</span><p class="sub" id="autoCheck" aria-live="polite" style="font-size:12px;margin-top:12px;color:#ffddc8">Checking automated source status…</p></div></section>
 <div class="metrics"><div class="metric"><div class="label">Tracked stories</div><div class="num" id="countAll">0</div><div class="mini">Source-linked records</div></div><div class="metric"><div class="label">Regulatory stories</div><div class="num" id="countReg">0</div><div class="mini">FDA / EU MDR / CDSCO</div></div><div class="metric"><div class="label">Acquisition activity</div><div class="num" id="countDeals">0</div><div class="mini">Announced & completed</div></div><div class="metric"><div class="label">New in past 48h</div><div class="num" id="countRecent">0</div><div class="mini">Relative to snapshot date</div></div></div>
 <section id="regSection"><div class="sectionbar"><div><h2>Regulatory watch</h2><p>Official trackers and relevant recent findings · not a complete approvals registry</p></div></div><div class="reggrid">
 <div class="reg"><div class="regtop"><span class="regname">🇺🇸 FDA</span><span class="quiet">Source-linked archive</span></div><h3>Latest verified FDA-related story</h3><p>Loading source-linked FDA regulatory updates from the archive.</p><a class="sourcelink" href="https://www.fda.gov/medical-devices/medical-devices-news-and-events/cdrh-new-news-and-updates" target="_blank" rel="noopener noreferrer">Official FDA tracker ↗</a></div>
@@ -117,5 +117,19 @@ async function loadPublishedArchive(){
     render();updateRegulatoryCards();
   }catch(err){console.warn('PulseScope: published archive unavailable; showing cached snapshot',err)}
 }
-render();updateRegulatoryCards();loadPublishedArchive();setInterval(loadPublishedArchive,15*60*1000);})();
+async function loadDailyStatus(){
+  if(!/^https?:$/.test(location.protocol))return;
+  try{
+    const response=await fetch('./data/status.json?t='+Date.now(),{cache:'no-store'});
+    if(!response.ok)throw Error('HTTP '+response.status);
+    const info=await response.json();
+    if(!/^\d{4}-\d{2}-\d{2}$/.test(info.lastCheckedDateIST||''))throw Error('Invalid status date');
+    const issues=Object.values(info.sources||{}).some(x=>x.status!=='ok');
+    const added=Number.isInteger(info.addedThisCheck)?info.addedThisCheck:0;
+    $('autoCheck').textContent='Automatic source check: '+dateStr(info.lastCheckedDateIST)+' · '+added+' newly indexed records · '+(issues?'some sources unavailable':'PubMed and FDA data checked')+' · Research leads require review';
+  }catch(e){
+    $('autoCheck').textContent='Automated check status unavailable · Check repository Actions';
+  }
+}
+render();updateRegulatoryCards();loadPublishedArchive();loadDailyStatus();setInterval(()=>{loadPublishedArchive();loadDailyStatus()},15*60*1000);})();
 </script></body></html>
