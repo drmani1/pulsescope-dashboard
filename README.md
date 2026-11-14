@@ -1,31 +1,33 @@
 # PulseScope — Global Medical Wearables Intelligence
 
-The same dashboard URL will be **https://drmani1.github.io/pulsescope-dashboard/** once GitHub Pages has been enabled.
+**Permanent dashboard:** https://drmani1.github.io/pulsescope-dashboard/
 
-## Enable the website (one-time)
+Research and intelligence tracker for medical-grade wearables, health and wellness sensors, cardiovascular and metabolic monitoring, sleep and stress technologies, medtech corporate developments, and FDA / CDSCO / EU MDR. All historical entries remain in a cumulative, publicly readable source-linked archive.
 
-Open [Settings → Pages](https://github.com/drmani1/pulsescope-dashboard/settings/pages) and choose **Build and deployment → Source → GitHub Actions**. Inspect the [Actions tab](https://github.com/drmani1/pulsescope-dashboard/actions) for successful deployment; the website URL may return 404 until then.
+## Automated daily publishing — enabled
 
-## Daily updates
+- **08:00 IST**: Separate ChatGPT daily global editorial briefing (enabled). It is instructed to verify direct official/journal/company links and attempt to write curated additions to this repository using the connected GitHub tool. That write is conditional on the automation's available connection and successful completion; inspect the task result and repository commits rather than assuming it happened.
+- **Approximately 08:15 IST every day**: [Daily PulseScope Safe-Source Updates](https://github.com/drmani1/pulsescope-dashboard/actions/workflows/daily.yml) runs automatically via GitHub Actions, including weekends. GitHub can delay, suspend, or fail scheduled runs.
+  - Directly queries the **U.S. National Library of Medicine's PubMed E-utilities** for newly indexed, topically relevant wearable research metadata.
+  - Checks the **official openFDA 510(k) database**, which is updated **monthly**; a matching record is posted only when its direct FDA decision-letter PDF can be checked. 510(k) clearance is never described as PMA approval.
+  - Posts **only pre-approved direct HTTPS source URLs**; no Google News redirects, short links, ad funnels or third-party RSS ingestion.
+  - Adds only genuinely new entries. Preserves prior records. If no new eligible findings are found, it records a daily check without inventing a story.
+  - Commits the shared archive and last-check status, then **deploys the site to the same Pages URL in the same workflow** (GitHub Actions token commits do not trigger other workflows).
+- **GitHub Pages** deployment from edited archive/UI also runs via [Publish PulseScope](https://github.com/drmani1/pulsescope-dashboard/actions/workflows/deploy.yml).
 
-- `.github/workflows/daily.yml` audits only vetted links every day at approximately **08:15 IST** and republishes the validated archive. Unreviewed RSS ingestion is disabled.
-- The **separate 8:00 AM ChatGPT editorial briefing is not automatically integrated with GitHub**. To publish its verified JSON output, merge it with `python scripts/merge_daily.py daily.json`, then commit the changed archive to `main`. Alternatively, ask ChatGPT to publish a briefing in a conversation with GitHub write access.
-- GitHub Actions may fail or be suspended. Check the [daily workflow](https://github.com/drmani1/pulsescope-dashboard/actions/workflows/daily.yml) periodically; this is not a guarantee of uninterrupted updates.
+**Scope and accuracy:** The unattended PubMed feed is **bibliographic discovery, not clinical appraisal**. Indexed articles are not guaranteed peer reviewed or clinically valid. openFDA releases may lag; this is not exhaustive FDA clearance/approval monitoring. Autonomous regulatory/licensing tracking for **CDSCO and EU MDR**, company acquisitions and consumer wellness launches relies on the separate editorial task; those topics are **not claimed fully covered by the independent GitHub feed**.
 
-## Archive and exports
+## Historical archive and exports
 
-The shared cumulative `data/briefings.json` is fetched when the page opens and again every 15 minutes. Previous days are retained. The dashboard offers CSV and JSON exports. Browser-only imports are not published across devices unless separately merged and committed to GitHub.
+- Cumulative reviewed/news records: `data/briefings.json`.
+- Last automated source-check information: `data/status.json`.
+- The dashboard loads published records and updates them every ~15 minutes while open.
+- It displays the latest source-check status separately from the news snapshot, and supports **CSV and JSON** exports.
+- Browser-only imports remain local unless explicitly merged into the GitHub repository.
+- Publish an editorial JSON export via `python scripts/merge_daily.py briefing.json`, then commit the archive. The merge validates direct-source hostnames and preserves older records.
 
-This is a **selective news intelligence feed**, not a complete regulator database. For confirmed FDA 510(k), CDSCO licences or EU MDR certificates, use official primary records. The repository is public; do not add private health information or credentials.
+## Security
 
+The domain policy is maintained in `scripts/validate_sources.py` (publishing) and `index.html` (browser). It restricts links to selected direct HTTPS government agencies, research organizations, journals, reputable news domains and verified company websites. Unknown/redirecting domains are blocked. **HTTPS and a vetted domain reduce risk but cannot guarantee that any site will remain uncompromised.** Verify the destination and the contents of a new page before relying on medical-device claims.
 
-## Link-safety policy (12 Nov 2026)
-
-PulseScope now uses a **reviewed source-domain allowlist** for both the website and its publishing/merging pipeline, implemented in `scripts/validate_sources.py` and `index.html`. It allows direct HTTPS URLs to official regulators, universities, peer-reviewed science publishers, clinical-trial registries, confirmed companies and carefully selected medical-news outlets. It blocks unknown URLs, Google News redirect links, common tracking redirects, and unsafe imports. Approved links show their destination domain; external links open without sharing the dashboard as a referrer.
-
-**Removed from the visible dashboard:** 13 historical unreviewed Google News RSS links that could redirect to unpredictable pages. The earlier records remain in Git history for auditing. The 15 editor-reviewed research/regulatory/news records are retained.
-
-**Automatic discovery paused for link safety:** The old Google News RSS script is intentionally disabled. The daily GitHub Actions job now audits and republishes **only previously vetted records**, not third-party RSS headlines. The 8:00 AM IST ChatGPT editorial briefing remains scheduled and can publish new verified items only when GitHub write access is available. If no verified records are published, the dashboard may show yesterday's data; this is safer than posting unverified links. Do not imply that daily content updates are guaranteed.
-
-**Limits:** HTTPS and an approved domain reduce exposure but cannot guarantee that external pages will never be compromised, changed or redirected. Before adding a new source domain, manually inspect both the company/agency identity and the final linked page. To add a new vetted host, update the allowlists in both `scripts/validate_sources.py` and `index.html`.
-
+This is a **selective intelligence dashboard**, not a medical decision tool, an exhaustive global registry, or evidence that all linked products are clinically approved. The repository is public: never add private health data or credentials.
