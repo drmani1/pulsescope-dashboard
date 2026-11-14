@@ -1,16 +1,16 @@
 {
-  "lastCheckedAtUTC": "2026-11-14T09:25:40Z",
+  "lastCheckedAtUTC": "2026-11-14T09:26:50Z",
   "lastCheckedDateIST": "2026-11-14",
-  "addedThisCheck": 6,
+  "addedThisCheck": 0,
   "recordsInArchive": 25,
   "sources": {
     "PubMed": {
       "status": "ok",
-      "newRecords": 6
+      "newRecords": 0
     },
     "FDA 510k": {
       "status": "ok",
-      "newRecords": 6
+      "newRecords": 0
     }
   },
   "disclaimer": "Official bibliographic and FDA-record discovery only. Not exhaustive for FDA/CDSCO/EU MDR, wellness, acquisitions or the worldwide industry. Research findings need editorial review before clinical claims."
