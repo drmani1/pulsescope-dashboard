@@ -125,8 +125,8 @@ async function loadDailyStatus(){
     const info=await response.json();
     if(!/^\d{4}-\d{2}-\d{2}$/.test(info.lastCheckedDateIST||''))throw Error('Invalid status date');
     const issues=Object.values(info.sources||{}).some(x=>x.status!=='ok');
-    const added=Number.isInteger(info.addedThisCheck)?info.addedThisCheck:0;
-    $('autoCheck').textContent='Automatic source check: '+dateStr(info.lastCheckedDateIST)+' · '+added+' newly indexed records · '+(issues?'some sources unavailable':'PubMed and FDA data checked')+' · Research leads require review';
+    const added=Number.isInteger(info.addedToday)?info.addedToday:(Number.isInteger(info.addedThisCheck)?info.addedThisCheck:0);
+    $('autoCheck').textContent='Automatic source check: '+dateStr(info.lastCheckedDateIST)+' · '+added+' safe-source research records added today · '+(issues?'some sources unavailable':'PubMed and FDA data checked')+' · Research leads require review';
   }catch(e){
     $('autoCheck').textContent='Automated check status unavailable · Check repository Actions';
   }
