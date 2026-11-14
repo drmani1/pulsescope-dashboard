@@ -155,6 +155,7 @@ def pubmed_items():
             "sourceUrl": source_url,
             "priority": "low",
             "tag": "PubMed research discovery · requires appraisal",
+            "firstSeen": TODAY.isoformat(),
         })
         if len(gathered) >= 6:
             break
@@ -216,6 +217,7 @@ def fda_items():
             "sourceUrl": letter,
             "priority": "medium",
             "tag": "FDA 510(k) · official decision record",
+            "firstSeen": TODAY.isoformat(),
         })
         if len(output) >= 5:
             break
@@ -243,10 +245,18 @@ def main():
             outcomes[key] = {"status": "unavailable", "reason": str(exc)[:140]}
             print(f"{key} unavailable: {type(exc).__name__}: {exc}")
     checked = NOW.isoformat(timespec="seconds").replace("+00:00", "Z")
+    today_added = sum(
+        row.get("firstSeen") == TODAY.isoformat() or (
+            str(row.get("id", "")).startswith("pubmed-")
+            and row.get("date") == TODAY.isoformat()
+        )
+        for row in existing.values()
+    )
     status = {
         "lastCheckedAtUTC": checked,
         "lastCheckedDateIST": TODAY.isoformat(),
         "addedThisCheck": new,
+        "addedToday": today_added,
         "recordsInArchive": len(existing),
         "sources": outcomes,
         "disclaimer": (
