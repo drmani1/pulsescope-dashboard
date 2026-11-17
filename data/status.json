@@ -1,13 +1,13 @@
 {
-  "lastCheckedAtUTC": "2026-11-16T03:46:03Z",
-  "lastCheckedDateIST": "2026-11-16",
-  "addedThisCheck": 4,
-  "addedToday": 4,
-  "recordsInArchive": 29,
+  "lastCheckedAtUTC": "2026-11-17T03:32:23Z",
+  "lastCheckedDateIST": "2026-11-17",
+  "addedThisCheck": 5,
+  "addedToday": 5,
+  "recordsInArchive": 34,
   "sources": {
     "PubMed": {
       "status": "ok",
-      "newRecords": 4
+      "newRecords": 5
     },
     "FDA 510k": {
       "status": "ok",
