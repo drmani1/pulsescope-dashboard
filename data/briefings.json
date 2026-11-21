@@ -1,7 +1,41 @@
 {
-  "asOf": "2026-11-20",
+  "asOf": "2026-11-21",
   "timezone": "Asia/Kolkata",
   "items": [
+    {
+      "id": "pubmed-43061647",
+      "date": "2026-11-21",
+      "category": "tech",
+      "region": "Global",
+      "country": "International",
+      "company": "Pagano S",
+      "title": "Newly indexed wearable research: Consumer Wearable-Derived Activity and Gait Metrics Characterize Early Recovery After Total Hip Arthroplasty.",
+      "summary": "A publication titled 'Consumer Wearable-Derived Activity and Gait Metrics Characterize Early Recovery After Total Hip Arthroplasty.' was found in the U.S. National Library of Medicine's PubMed index. Journal: JB & JS open access; publication date as listed: 2026 Oct-Dec. This is bibliographic discovery only; methods, results, peer-review status and medical claims have not been independently evaluated.",
+      "impact": "Research lead for founders: examine the original study, accuracy, sample size and real-world validation before drawing product conclusions.",
+      "status": "New PubMed-indexed research lead. NOT FDA approval, EU CE marking or confirmed clinical benefit.",
+      "source": "U.S. National Library of Medicine · PubMed",
+      "sourceUrl": "https://pubmed.ncbi.nlm.nih.gov/43061647/",
+      "priority": "low",
+      "tag": "PubMed research discovery · requires appraisal",
+      "firstSeen": "2026-11-21"
+    },
+    {
+      "id": "pubmed-43060785",
+      "date": "2026-11-21",
+      "category": "tech",
+      "region": "Global",
+      "country": "International",
+      "company": "Moloney BM",
+      "title": "Newly indexed wearable research: The Associations of Heart Rate Variability With Inflammatory Biomarkers.",
+      "summary": "A publication titled 'The Associations of Heart Rate Variability With Inflammatory Biomarkers.' was found in the U.S. National Library of Medicine's PubMed index. Journal: Kidney international reports; publication date as listed: 2027 Jan. This is bibliographic discovery only; methods, results, peer-review status and medical claims have not been independently evaluated.",
+      "impact": "Research lead for founders: examine the original study, accuracy, sample size and real-world validation before drawing product conclusions.",
+      "status": "New PubMed-indexed research lead. NOT FDA approval, EU CE marking or confirmed clinical benefit.",
+      "source": "U.S. National Library of Medicine · PubMed",
+      "sourceUrl": "https://pubmed.ncbi.nlm.nih.gov/43060785/",
+      "priority": "low",
+      "tag": "PubMed research discovery · requires appraisal",
+      "firstSeen": "2026-11-21"
+    },
     {
       "id": "pubmed-43056386",
       "date": "2026-11-20",
