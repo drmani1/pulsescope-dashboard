@@ -1,7 +1,24 @@
 {
-  "asOf": "2026-11-21",
+  "asOf": "2026-11-23",
   "timezone": "Asia/Kolkata",
   "items": [
+    {
+      "id": "pubmed-43064369",
+      "date": "2026-11-23",
+      "category": "tech",
+      "region": "Global",
+      "country": "International",
+      "company": "Shao J",
+      "title": "Newly indexed wearable research: Polyimide-Encapsulated Ag/Aramid-Reinforced Graphene Aerogel for Ultrasensitive and Fatigue-Resistant Wearable Motion Sensing.",
+      "summary": "A publication titled 'Polyimide-Encapsulated Ag/Aramid-Reinforced Graphene Aerogel for Ultrasensitive and Fatigue-Resistant Wearable Motion Sensing.' was found in the U.S. National Library of Medicine's PubMed index. Journal: ACS applied materials & interfaces; publication date as listed: 2026 Nov 23. This is bibliographic discovery only; methods, results, peer-review status and medical claims have not been independently evaluated.",
+      "impact": "Research lead for founders: examine the original study, accuracy, sample size and real-world validation before drawing product conclusions.",
+      "status": "New PubMed-indexed research lead. NOT FDA approval, EU CE marking or confirmed clinical benefit.",
+      "source": "U.S. National Library of Medicine · PubMed",
+      "sourceUrl": "https://pubmed.ncbi.nlm.nih.gov/43064369/",
+      "priority": "low",
+      "tag": "PubMed research discovery · requires appraisal",
+      "firstSeen": "2026-11-23"
+    },
     {
       "id": "pubmed-43061647",
       "date": "2026-11-21",
